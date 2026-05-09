@@ -36,17 +36,16 @@ jobs:
           echo "https://${GIT_TOKEN}:x-oauth-basic@github.com" > ~/.git-credentials
           
           # Remove any existing gitops directory
-          rm -rf gitops
+          Remove-Item gitops -Recurse -Force
           
           # Clone repository using HTTPS URL without token
           git clone https://github.com/alactic/grade-api-gitops.git gitops
           cd gitops
           
-          if [[ "$OSTYPE" == "darwin"* ]]; then
-            sed -i '' "s|image: ghcr.io/${{ github.repository }}:.*|image: ghcr.io/${{ github.repository }}:${{ github.sha }}|g" deployment.yaml
-          else
-            sed -i "s|image: ghcr.io/${{ github.repository }}:.*|image: ghcr.io/${{ github.repository }}:${{ github.sha }}|g" deployment.yaml
-          fi
+          (Get-Content deployment.yaml) `
+            -replace "image: ghcr.io/${{ github.repository }}:.*", `
+                    "image: ghcr.io/${{ github.repository }}:${{ github.sha }}" `
+            | Set-Content deployment.yaml
           
           # Commit changes
           git config --global user.name "GitHub Actions"
