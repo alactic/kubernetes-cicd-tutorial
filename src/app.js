@@ -9,7 +9,7 @@ app.use(cors());
 let grades = [];
 
 app.get('/grades', (req, res) => {
-  console.log('Received GET request for grade 2');
+  console.log('Received GET request for grade 6');
   res.json(grades);
 });
 
