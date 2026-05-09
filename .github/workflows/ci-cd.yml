@@ -47,8 +47,17 @@ jobs:
           git add deployment.yaml
           git commit -m "Update image to ${{ github.sha }}"
 
+          Write-Host "$oldImage"
+          Write-Host $oldImage
+
+          Write-Host "$newImage"
+          Write-Host $newImage
+
+          Write-Host deployment.yaml
+
           Write-Host "https://***@github.com/alactic/grade-api-gitops.git"
 
+          Write-Host "Token length: $($env:GIT_TOKEN)"
           Write-Host "Token length: $($env:GIT_TOKEN.Length)"
 
           git push -f https://${env:GIT_TOKEN}@github.com/alactic/grade-api-gitops.git main
