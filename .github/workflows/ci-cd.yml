@@ -37,9 +37,14 @@ jobs:
 
           # Update image tag in deployment.yaml
           $file = "deployment.yaml"
-          $oldImage = "image: ghcr.io/${{ github.repository }}:.*"
-          $newImage = "image: ghcr.io/${{ github.repository }}:${{ github.sha }}"
-          (Get-Content $file) -replace $oldImage, $newImage | Set-Content $file
+
+          $content = Get-Content $file -Raw
+
+          $content = $content -replace `
+          'image:\s*ghcr\.io\/.*\/kubernetes-cicd-tutorial:.*', `
+          "image: ghcr.io/${{ github.repository }}:${{ github.sha }}"
+
+          Set-Content $file $content
 
           # Commit and push
           git config user.name "GitHub Actions"
